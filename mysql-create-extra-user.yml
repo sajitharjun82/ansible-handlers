@@ -1,0 +1,35 @@
+---
+- name: "Instaling mysql in ubuntu"
+  hosts: "debian"
+  become: true
+  vars_files: 
+    - credentials.var
+
+  tasks:
+    - name: "Installing mysql pacjkage"
+      apt:
+        name:
+          - python-mysqldb
+          - mysql-server
+        state: present
+    - name: "Starting service"
+      service:
+        name: mysql
+        state: restarted
+        enabled: true
+    - name: "create new db"
+      mysql_db:
+        login_user: "root"
+        login_password:  "{{ root_password }}"
+        name: "{{ new_db }}"
+        state: present
+
+    - name: "login to mysql and create user"
+      mysql_user: 
+        login_user: "root"
+        login_password:  "{{ root_password }}"
+        name: "{{ new_user }}"
+        password: "{{ new_password }}"
+        state: present
+        priv: "{{ new_db }}.*:ALL"
+        
