@@ -1,0 +1,17 @@
+---
+- name: "Instaling mysql in ubuntu"
+  hosts: "debian"
+  become: true
+  tasks:
+    - name: "Installing mysql pacjkage"
+      apt:
+        name: 
+          - python-mysqldb
+          - mysql-server
+        state: present
+    - name: "Starting service"
+      service:
+        name: mysql
+        state: restarted
+        enabled: true
+
