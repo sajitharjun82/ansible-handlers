@@ -1,0 +1,27 @@
+---
+- name: "Instaling mysql in ubuntu"
+  hosts: "debian"
+  become: true
+  vars: 
+    root_password: "Password123"
+
+  tasks:
+    - name: "Installing mysql pacjkage"
+      apt:
+        name:
+          - python-mysqldb
+          - mysql-server
+        state: present
+    - name: "Starting service"
+      service:
+        name: mysql
+        state: restarted
+        enabled: true
+    - name: "Password reset"
+      mysql_user: 
+        login_user: "root"
+        login_password: ""
+        name: "root"
+        password: "{{ root_password }}"
+        host_all: true
+
